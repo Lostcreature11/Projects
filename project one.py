@@ -1,16 +1,7 @@
-"""
-Interactive Automated File Organizer
-Author: <Your Name>
-Description:
-Organizes files from a source directory into a chosen
-destination directory with conflict handling and logging.
-"""
 
 import logging
 import shutil
 from pathlib import Path
-
-# ------------------- CONFIGURATION -------------------
 
 CATEGORIES = {
     ".py": "Python_Code",
@@ -84,8 +75,6 @@ def organize_directory(source: Path, destination: Path, dry_run=False):
     print(f"Errors: {errors}")
 
 
-# ------------------- MAIN PROGRAM -------------------
-
 if __name__ == "__main__":
     print("==== Automated File Organizer ====")
 
@@ -101,4 +90,5 @@ if __name__ == "__main__":
     else:
         dry_mode = True if dry_choice == "yes" else False
         organize_directory(source_path, destination_path, dry_mode)
+
         
