@@ -1,0 +1,41 @@
+id,name,gender,age,price,date,region,temp_id,notes
+1,John,Male,25,$100,2023-01-01,West,TX100,Regular customer
+2,Mary,Female,30,$200,2023-02-15,EAST,TX101,
+3,John,Male,25,$100,2023-01-01,West,TX100,Duplicate entry
+4,Alice,Female,,,$300,2023/03/10,south,TX102,Missing age
+5,Bob,male,45,$400,,WEST,TX103,
+6,Clara,FEMALE,29,$250,2023-04-01,South,TX104,
+7,,Male,33,$150,2023-05-12,East,TX105,Missing name
+8,David,Male,28,$1000,invalid_date,west,TX106,Date error
+9,Eva,Female,22,$120,2023-06-20,SOUTH,TX107,
+10,Frank,Male,1000,$50,2023-07-01,North,TX108,Age outlier
+11,Grace,Female,27,$180,2023-08-01, west ,TX109,Extra spaces
+12,Helen,Female,31,$210,2023-09-10,EAST,TX110,
+13,Ian,Male,26,$NaN,2023-10-05,South,TX111,Invalid price
+14,Jack,Male,35,$320,2023-11-12,West,TX112,
+15,Karen,Female,29,$280,2023-12-01,NORTH,TX113,
+16,Liam,Male,,,$150,2024-01-01,East,TX114,Missing age and price
+17,Mona,Female,24,$230,01-02-2024,South,TX115,Mixed date format
+18,Nina,Female,29,$260,2024/03/15,WEST,TX116,
+19,Oscar,Male,41,$500,2024-04-20,south,TX117,
+20,Paul,Male,39,$450,2024-05-25,East,TX118,
+21,Quincy,Male,34,$370,2024-06-30,NORTH,TX119,
+22,Rita,Female,28,$190,2024-07-10,West,TX120,
+23,Sam,Male,27,$210,2024-08-18,EAST,TX121,
+24,Tina,Female,30,$240,2024-09-22,South,TX122,
+25,Umar,Male,33,$260,2024-10-11,West,TX123,
+26,Vera,Female,29,$300,2024-11-05,NORTH,TX124,
+27,Walt,Male,31,$310,2024-12-15,East,TX125,
+28,Xena,Female,26,$220,2025-01-05,South,TX126,
+29,Yara,Female,27,$230,2025-02-10,WEST,TX127,
+30,Zack,Male,28,$240,2025-03-20,East,TX128,
+31,John,Male,25,$100,2023-01-01,West,TX100,Another duplicate
+32,Alice,Female,,,$300,2023/03/10,south,TX102,Duplicate messy row
+33,Bob,Male,45,$400,2023-02-01,WEST,TX103,
+34,,Female,29,$270,2024-04-01,South,TX129,Missing name
+35,Henry,Male,-5,$100,2024-05-01,East,TX130,Negative age
+36,Ivy,Female,150,$90,2024-06-01,North,TX131,Unrealistic age
+37,Jason,Male,40,$abc,2024-07-01,West,TX132,Invalid price text
+38,Kate,Female,32,$350,2024-08-01,SOUTH,TX133,
+39,Luke,Male,29,$280,,West,TX134,Missing date
+40,Mike,Male,38,$420,2024-09-01, EAST ,TX135,Extra spaces
