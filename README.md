@@ -1,73 +1,100 @@
-Interactive Web Scraper with Proxy Rotation
+ Async GitHub API Wrapper Library
 
-Interactive Web Scraper with Proxy Rotation is a menu-driven command-line application built using Python. The tool allows users to scrape web pages while supporting proxy rotation, User-Agent rotation, configurable retry attempts, and exponential backoff handling for blocked requests (HTTP 403 and 429). This project demonstrates practical web scraping techniques and basic anti-block strategies commonly used in real-world automation workflows.
+ Overview
 
-Features:
-- Interactive CLI menu system
-- Dynamic URL input
-- Add and remove proxies
-- Add custom User-Agent strings
-- Configurable retry attempts
-- Automatic retry with exponential backoff
-- HTML parsing using BeautifulSoup
-- Page title extraction
+Async GitHub API Wrapper is a production-ready Python library that provides an asynchronous interface to the GitHub REST API using aiohttp. The library is designed with clean architecture principles, built-in rate limiting, automatic pagination handling, structured error management, and developer-friendly abstractions.
 
-Technologies Used:
-- Python 3.x
-- requests
-- beautifulsoup4
-- lxml
+It exposes a typed, resource-oriented client class that simplifies interaction with GitHub resources such as users and repositories while handling real-world API constraints like rate limits and transient failures.
 
-Installation Instructions:
-1. Install Python 3.x.
-   Verify installation using:
-   python --version
+---
 
-2. Install required libraries:
-   pip install requests beautifulsoup4 lxml
+ Features
 
-How to Run:
-1. Navigate to the project directory:
-   cd path_to_project_folder
+- Fully asynchronous API client using asyncio and aiohttp
+- Class-based client architecture (GitHubAPI)
+- Async context manager support for proper session handling
+- In-memory token-bucket style rate limiter
+- Automatic handling of GitHub rate limit headers
+- Retry-after logic for 429 responses
+- Automatic retries with exponential backoff for 5xx errors
+- Async generator-based pagination
+- Custom exception hierarchy for structured error handling
+- Type hints for all public methods
+- Interactive CLI demonstration included
 
-2. Run the script:
-   python web_scraper.py
+---
 
-3. Use the interactive menu to:
-   - Scrape a URL
-   - Add or remove proxies
-   - Add User-Agent strings
-   - Set retry attempts
-   - Exit the program
+ Technologies Used
 
-Project Structure:
-- web_scraper.py
-- README.md
+- Python 3.8+
+- asyncio
+- aiohttp
+- Type hints (typing module)
 
-Example Workflow:
-1. Launch the program.
-2. Optionally add proxy servers.
-3. Configure retry attempts.
-4. Enter a target URL.
-5. View the extracted page title in the terminal.
+---
 
-Learning Objectives:
-- Understanding HTTP requests in Python
-- Configuring proxies in the requests library
-- Implementing User-Agent rotation
-- Handling request failures with retry logic
-- Applying exponential backoff strategy
-- Parsing HTML content using BeautifulSoup
-- Designing interactive CLI applications
+Installation
 
-Limitations:
-- Does not bypass advanced bot-detection systems.
-- Does not execute JavaScript-rendered content.
-- Requires valid and functional proxies for rotation to work effectively.
+1. Install Python 3.8 or higher.
+2. Install required dependency:
 
-Future Improvements:
-- Multi-threaded scraping support
-- Proxy validation system
-- Logging and error tracking
-- Export scraped data to CSV or JSON
-- Headless browser integration (e.g., Selenium)
+   pip install aiohttp
+
+---
+
+How to Run (Interactive Demo)
+
+Navigate to the project directory and run:
+
+   python async_github.py
+
+The interactive menu allows you to:
+1. Fetch a GitHub user profile
+2. Stream a user's repositories with automatic pagination
+3. Exit the program
+
+You may provide a GitHub Personal Access Token for higher rate limits, or press Enter to use unauthenticated public access.
+
+---
+
+ Architecture Overview
+
+The library is structured around four major components:
+
+1. GitHubAPI Client  
+   - Central class managing HTTP requests  
+   - Maintains a shared aiohttp session  
+   - Exposes resource-oriented public methods  
+
+2. RateLimiter  
+   - Implements in-memory token bucket behavior  
+   - Controls maximum API calls per time window  
+   - Prevents exceeding GitHub’s rate limits  
+
+3. Pagination System  
+   - Uses async generators  
+   - Streams paginated responses page by page  
+   - Avoids loading large datasets into memory  
+
+4. Error Hierarchy  
+   - APIError (base exception)  
+   - NotFoundError (404)  
+   - RateLimitError (rate limit exceeded)  
+   - ServerError (5xx failures)  
+
+---
+Example Usage (Library Mode)
+
+```python
+import asyncio
+from async_github import GitHubAPI
+
+async def main():
+    async with GitHubAPI("your_token_here") as api:
+        user = await api.get_user("torvalds")
+        print(user["name"])
+
+        async for repo in api.get_repositories("torvalds"):
+            print(repo["name"])
+
+asyncio.run(main())
