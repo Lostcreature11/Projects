@@ -1,62 +1,32 @@
-Interactive Data Cleaning \& Preprocessing Tool
+ Secure CLI Password Manager
 
-&nbsp;Project Overview
+ Overview
+A command-line password manager built with Python that securely stores website credentials using strong encryption.
 
-This project is a Python-based interactive data cleaning tool designed to preprocess raw CSV datasets efficiently.  
+Credentials are encrypted using AES-GCM, and the encryption key is derived from a master password using PBKDF2 with SHA-256.
 
-It allows users to clean messy datasets through a step-by-step guided process directly from the terminal.
+---
 
+Features
+- Master password protection
+- AES-GCM encryption
+- PBKDF2 key derivation (480,000 iterations)
+- Add credentials
+- View stored credentials
+- List saved websites
+- Encrypted local vault storage
 
+---
 
-The tool handles common real-world data issues such as:
+Technologies
+- Python 3.x
+- cryptography library
+- JSON
+- Base64 encoding
 
-\- Duplicate records
+---
 
-\- Missing values
+ Installation
 
-\- Inconsistent text formatting
-
-\- Mixed date formats
-
-\- Unwanted columns
-
-
-
-This project demonstrates practical data preprocessing skills used in data analytics and data science workflows.
-
-
-
-
-
-&nbsp;Features
-
-
-
-✔ Load any CSV file dynamically  
-
-✔ Remove duplicate rows  
-
-✔ Drop selected unwanted columns  
-
-✔ Handle missing values (mean / median / mode / drop)  
-
-✔ Convert columns to datetime format  
-
-✔ Standardize text data (lowercase \& trimmed spaces)  
-
-✔ Save cleaned dataset as a new CSV file  
-
-
-
-&nbsp;Technologies Used
-
-
-
-\- Python 3.x
-
-\- Pandas Library
-
-
-
-
-
+1. Install Python 3.x  
+2. Install required dependency:
