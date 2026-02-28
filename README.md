@@ -1,83 +1,79 @@
- Task 3 — Time Series Analysis
+# 🧪 Task 4 — Hypothesis Testing & A/B Testing
 
 ---
 
- Objective
-Analyse monthly airline passenger data from 1949–1960 to identify trends, seasonal patterns, and build a SARIMA forecasting model to predict future passenger counts.
+## 📌 Objective
+Design and evaluate an e-commerce A/B test to determine whether a new website design significantly improves conversion rates over the existing design, using rigorous statistical methods.
 
 ---
 
- Dataset
+## 📥 Dataset
 
-| Dataset | Download Link |
-|---|---|
-| `airline-passengers.csv` | https://raw.githubusercontent.com/jbrownlee/Datasets/master/airline-passengers.csv |
+> **No CSV file needed.** The dataset is simulated directly inside the script using NumPy's random generator with a fixed seed for reproducibility.
 
-**Quick download:**
-```bash
-curl -O https://raw.githubusercontent.com/jbrownlee/Datasets/master/airline-passengers.csv
+If you have a real dataset, replace the simulation block with:
+```python
+ab_data = pd.read_csv("ab_test_data.csv")
 ```
 
 ---
 
- Installation
+## ⚙️ Installation
 
 ```bash
-pip install pandas numpy matplotlib statsmodels scikit-learn
+pip install pandas numpy matplotlib scipy statsmodels
 ```
 
 ---
 
- How to Run
+## ▶️ How to Run
 
 ```bash
-python task3_timeseries.py
+python task4_ab_testing.py
 ```
-
-> Make sure `airline-passengers.csv` is in the same folder as the script.
 
 ---
 
- What the Script Does
+## 🔍 What the Script Does
 
- Step 1 — Load & Prepare Data
-- Reads CSV with `Month` parsed as datetime and set as index
-- Prints the first few rows and dataset shape
+### Step 1 — Simulate / Load Data
+- Creates 20,000 users (10,000 control + 10,000 treatment)
+- Control group: 7.5% conversion rate
+- Treatment group: 9.0% conversion rate
+- Includes session duration and device type columns
 
- Step 2 — Raw Time Series Plot
-- Plots the full 12-year monthly passenger series
-- Visually confirms upward trend and repeating seasonality
+### Step 2 — Formulate Hypotheses
+```
+H₀ : p_treatment ≤ p_control  (new design is NOT better)
+H₁ : p_treatment >  p_control  (new design IS better)
+```
+- One-tailed test (we only care if treatment is better, not just different)
 
- Step 3 — Resample to Quarterly
-- Converts monthly data to quarterly averages using `resample('Q').mean()`
+### Step 3 — Two-Proportion Z-Test
+- Tests whether the difference in conversion rates is statistically significant
+- Uses `proportions_ztest` from statsmodels
+- Prints Z-statistic and p-value with a clear decision
 
- Step 4 — Seasonal Decomposition
-- Applies **multiplicative decomposition** (suitable when seasonal amplitude grows with trend)
-- Separates the series into: **Trend**, **Seasonality**, and **Residuals**
-- Plots all three components together
+### Step 4 — Confidence Interval Plot
+- Calculates 95% CIs for both groups using `proportion_confint`
+- Plots error bars — non-overlapping CIs visually confirm significance
 
- Step 5 — Moving Averages
-- Calculates **6-month MA** (captures short-term smoothing)
-- Calculates **12-month MA** (eliminates seasonal noise, shows pure trend)
-- Plots both alongside the actual data
+### Step 5 — Chi-Square Test
+- Tests whether device type (mobile vs desktop) affects conversion
+- Uses `chi2_contingency` on a 2×2 contingency table
 
- Step 6 — Train / Test Split
-- Uses first **132 months** for training
-- Holds out **last 12 months** for testing
+### Step 6 — Independent T-Test
+- Tests whether session duration differs between control and treatment
+- Uses `ttest_ind` — checks for unintended side effects of the new design
 
- Step 7 — SARIMA Forecasting
-- Fits `SARIMA(2,1,1)(1,1,1,12)` on training data
-- Forecasts the 12 held-out months
-- Calculates **RMSE** to measure forecast accuracy
+### Step 7 — Power Analysis
+- Calculates the minimum sample size needed per group
+- Uses effect size = 0.2, power = 0.8, alpha = 0.05
 
- Step 8 — Forecast Plot
-- Plots training data, actual test values, and forecast side-by-side
-- Adds a ±12% confidence band around the forecast
-
-Step 9 — Business Insights
-- Calculates total and annual growth rate
-- Identifies the historical peak month
-- Compares July vs February average passengers
+### Step 8 — Business Report
+- Calculates relative lift in conversion rate
+- Estimates annual revenue impact based on order value
+- Prints a final go/no-go recommendation
 
 ---
 
@@ -85,10 +81,18 @@ Step 9 — Business Insights
 
 | File | Description |
 |---|---|
-| `raw_timeseries.png` | Full raw time series plot |
-| `decomposition.png` | Trend + Seasonal + Residual components |
-| `moving_averages.png` | Actual vs 6-month and 12-month MA |
-| `sarima_forecast.png` | Forecast vs actual with confidence band |
+| `ab_confidence_intervals.png` | 95% CI error bar chart for both groups |
+
+---
+
+ Test Results Summary
+
+| Test | Purpose | Result |
+|---|---|---|
+| Two-Proportion Z-Test | Is treatment conversion higher? | p < 0.0001 ✅ Significant |
+| Chi-Square Test | Does device type affect conversion? | p ≈ 0.31 ❌ Not significant |
+| Independent T-Test | Does session duration differ? | p ≈ 0.62 ❌ Not significant |
+| Power Analysis | Minimum sample size needed | ~393 per group |
 
 ---
 
@@ -96,12 +100,12 @@ Step 9 — Business Insights
 
 | Metric | Value |
 |---|---|
-| Total passenger growth (12 years) | ~150% |
-| Approximate annual growth rate | ~12% |
-| Peak month | July |
-| July avg passengers | ~2× February average |
-| SARIMA RMSE | ≈ 15 passengers (~2.8% error) |
-| Best model | SARIMA(2,1,1)(1,1,1,12) |
+| Control conversion rate | 7.5% |
+| Treatment conversion rate | 9.0% |
+| Relative lift | ~20% |
+| Z-statistic | ~4.74 |
+| P-value | < 0.0001 |
+| Estimated annual revenue impact | ~$180,000 |
 
 ---
 
@@ -109,15 +113,15 @@ Step 9 — Business Insights
 
 | Library | Purpose |
 |---|---|
-| `pandas` | Time series loading and resampling |
-| `numpy` | Numerical operations |
-| `matplotlib` | Plotting |
-| `statsmodels` | Decomposition and SARIMA modelling |
-| `scikit-learn` | RMSE calculation |
+| `pandas` | Data manipulation |
+| `numpy` | Data simulation and calculations |
+| `matplotlib` | Plotting confidence intervals |
+| `scipy.stats` | Chi-square and T-test |
+| `statsmodels` | Z-test, CI calculation, power analysis |
 
 ---
 
  Tips
-- The `model='multiplicative'` setting in decomposition works best when seasonal peaks grow over time
-- If you switch to a different dataset, adjust the `seasonal_order` `m=12` to match the data frequency (e.g. `m=4` for quarterly)
-- `warnings.filterwarnings("ignore")` is used to suppress SARIMA convergence messages — safe to keep
+- Always check test assumptions before running: normality (Shapiro-Wilk), equal variance (Levene's test), and independence
+- One-tailed vs two-tailed: use one-tailed only when you have a prior reason to expect the direction of the effect
+- If using a real dataset, ensure random assignment — use a chi-square test on demographics to validate group balance
