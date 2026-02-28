@@ -1,100 +1,116 @@
- Async GitHub API Wrapper Library
+Task 2 — Exploratory Data Analysis (EDA)
 
- Overview
-
-Async GitHub API Wrapper is a production-ready Python library that provides an asynchronous interface to the GitHub REST API using aiohttp. The library is designed with clean architecture principles, built-in rate limiting, automatic pagination handling, structured error management, and developer-friendly abstractions.
-
-It exposes a typed, resource-oriented client class that simplifies interaction with GitHub resources such as users and repositories while handling real-world API constraints like rate limits and transient failures.
+---
+ Objective
+Perform a full Exploratory Data Analysis on the Titanic dataset to uncover patterns, distributions, correlations, and anomalies before any modelling.
 
 ---
 
- Features
+ Dataset
 
-- Fully asynchronous API client using asyncio and aiohttp
-- Class-based client architecture (GitHubAPI)
-- Async context manager support for proper session handling
-- In-memory token-bucket style rate limiter
-- Automatic handling of GitHub rate limit headers
-- Retry-after logic for 429 responses
-- Automatic retries with exponential backoff for 5xx errors
-- Async generator-based pagination
-- Custom exception hierarchy for structured error handling
-- Type hints for all public methods
-- Interactive CLI demonstration included
+| Dataset | Download Link |
+|---|---|
+| `titanic.csv` | https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv |
+
+**Quick download:**
+```bash
+curl -O https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv
+```
 
 ---
 
- Technologies Used
+ Installation
 
-- Python 3.8+
-- asyncio
-- aiohttp
-- Type hints (typing module)
-
----
-
-Installation
-
-1. Install Python 3.8 or higher.
-2. Install required dependency:
-
-   pip install aiohttp
+```bash
+pip install pandas numpy matplotlib seaborn scipy
+```
 
 ---
 
-How to Run (Interactive Demo)
+ How to Run
 
-Navigate to the project directory and run:
+```bash
+python task2_eda.py
+```
 
-   python async_github.py
-
-The interactive menu allows you to:
-1. Fetch a GitHub user profile
-2. Stream a user's repositories with automatic pagination
-3. Exit the program
-
-You may provide a GitHub Personal Access Token for higher rate limits, or press Enter to use unauthenticated public access.
+> Make sure `titanic.csv` is in the same folder as the script.
 
 ---
 
- Architecture Overview
+ What the Script Does
 
-The library is structured around four major components:
+### Step 1 — Load & Inspect
+- Reads the CSV file
+- Prints shape, data types, and missing value counts
+- Shows full summary statistics for all columns
 
-1. GitHubAPI Client  
-   - Central class managing HTTP requests  
-   - Maintains a shared aiohttp session  
-   - Exposes resource-oriented public methods  
+### Step 2 — Handle Missing Values
+- Fills missing `Age` values with the **median**
+- Fills missing `Embarked` values with the **mode**
 
-2. RateLimiter  
-   - Implements in-memory token bucket behavior  
-   - Controls maximum API calls per time window  
-   - Prevents exceeding GitHub’s rate limits  
+### Step 3 — Distribution Analysis
+- **Histogram + KDE** — Age distribution curve
+- **Boxplot** — Fare spread across passenger classes
+- **Countplot** — Survival count split by gender
 
-3. Pagination System  
-   - Uses async generators  
-   - Streams paginated responses page by page  
-   - Avoids loading large datasets into memory  
+### Step 4 — Correlation Analysis
+- **Heatmap** of all numeric feature correlations
+- **Cross-tabulation** of survival rate by passenger class
 
-4. Error Hierarchy  
-   - APIError (base exception)  
-   - NotFoundError (404)  
-   - RateLimitError (rate limit exceeded)  
-   - ServerError (5xx failures)  
+### Step 5 — Outlier Detection
+- **Boxplot** to visually spot fare outliers
+- **Z-score method** to identify extreme fare values (|Z| > 3)
+
+### Step 6 — Advanced Visualizations
+- **Pairplot** — relationships between Age, Fare, Parch, and Survived
+- **FacetGrid** — Age distribution broken down by Survived × Pclass
+
+### Step 7 — Key Insights Printed
+- Overall, female, and male survival rates
+- Survival rate per passenger class
+- Skewness, kurtosis, and Pearson correlation values
 
 ---
-Example Usage (Library Mode)
 
-```python
-import asyncio
-from async_github import GitHubAPI
+ Output Files Generated
 
-async def main():
-    async with GitHubAPI("your_token_here") as api:
-        user = await api.get_user("torvalds")
-        print(user["name"])
+| File | Description |
+|---|---|
+| `dist_analysis.png` | Age histogram and Fare boxplot |
+| `survival_gender.png` | Survival count by gender |
+| `correlation_heatmap.png` | Feature correlation matrix |
+| `fare_outliers.png` | Fare outlier boxplot |
+| `pairplot.png` | Multivariate pairplot |
+| `facet_grid.png` | Age distribution by class and survival |
 
-        async for repo in api.get_repositories("torvalds"):
-            print(repo["name"])
+---
 
-asyncio.run(main())
+ Key Findings
+
+| Finding | Value |
+|---|---|
+| Female survival rate | ~74% |
+| Male survival rate | ~19% |
+| 1st class survival rate | ~63% |
+| 3rd class survival rate | ~24% |
+| Fare vs Survived correlation | r ≈ 0.26 |
+| Fare outliers detected | ~20 passengers (fare > $300) |
+
+---
+
+ Libraries Used
+
+| Library | Purpose |
+|---|---|
+| `pandas` | Data loading and manipulation |
+| `numpy` | Numerical calculations |
+| `matplotlib` | Base plotting |
+| `seaborn` | Statistical visualizations |
+| `scipy.stats` | Z-score outlier detection |
+
+---
+
+ Tips
+- All plots are saved automatically — no need to click anything
+- The script prints all insights to the console at the end
+- You can replace `titanic.csv` with any similar dataset and adjust column names accordingly
